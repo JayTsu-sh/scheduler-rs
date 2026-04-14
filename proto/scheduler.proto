@@ -1,0 +1,36 @@
+syntax = "proto3";
+package scheduler;
+
+message TaskDispatchRequest {
+    string execution_id = 1;
+    string schedule_id = 2;
+    string type_name = 3;
+    string task_data_json = 4;
+}
+
+message CancelRequest {
+    string execution_id = 1;
+    string schedule_id = 2;
+}
+
+message TaskResultReport {
+    string execution_id = 1;
+    string schedule_id = 2;
+    oneof outcome {
+        bool succeeded = 3;
+        string failed_error = 4;
+    }
+}
+
+message Empty {}
+
+// Worker-side service: scheduler calls these
+service WorkerService {
+    rpc Dispatch(TaskDispatchRequest) returns (Empty);
+    rpc Cancel(CancelRequest) returns (Empty);
+}
+
+// Scheduler-side service: worker calls this to report results
+service ResultService {
+    rpc ReportResult(TaskResultReport) returns (Empty);
+}
