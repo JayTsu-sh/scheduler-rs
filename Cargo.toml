@@ -55,6 +55,14 @@ optional = true
 version = "2"
 optional = true
 
+[dependencies.toml]
+version = "0.8"
+optional = true
+
+[dependencies.notify]
+version = "6"
+optional = true
+
 [build-dependencies]
 tonic-build = { version = "0.12", optional = true, features = ["prost"] }
 protox = { version = "0.7", optional = true }
@@ -71,8 +79,22 @@ remote = []
 remote-http = ["dep:reqwest", "dep:axum", "remote"]
 remote-grpc = ["dep:tonic", "dep:prost", "dep:tonic-build", "dep:protox", "remote"]
 remote-rabbitmq = ["dep:lapin", "dep:futures-lite", "remote"]
+job-loader = ["dep:toml", "dep:notify"]
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
 tracing-subscriber = "0.3"
 portpicker = "0.1"
+
+# 这些 example 引用了可选 feature 的代码，缺少对应 feature 时 cargo build --all-targets 应跳过。
+[[example]]
+name = "http_api"
+required-features = ["api", "remote-http"]
+
+[[example]]
+name = "remote_http"
+required-features = ["remote-http"]
+
+[[example]]
+name = "job_loader"
+required-features = ["job-loader"]

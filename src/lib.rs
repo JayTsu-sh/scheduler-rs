@@ -15,6 +15,8 @@ pub mod api;
 pub mod worker;
 #[cfg(feature = "remote")]
 pub mod transport;
+#[cfg(feature = "job-loader")]
+pub mod job_loader;
 
 pub mod prelude {
     pub use crate::error::SchedulerError;
